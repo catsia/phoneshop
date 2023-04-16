@@ -1,37 +1,21 @@
 package core.model.phone;
 
-import com.es.core.model.phone.JdbcPhoneDao;
 import com.es.core.model.phone.Phone;
 import com.es.core.model.phone.PhoneDao;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.sql.DataSource;
+import javax.annotation.Resource;
 
-@ContextConfiguration(locations = {"context/applicationContext-core.xml"})
+@RunWith(SpringRunner.class)
+@ContextConfiguration("/context/applicationContext-test.xml")
 public class JdbcPhoneDaoTest {
 
+    @Resource
     PhoneDao jdbcPhoneDao;
-
-    JdbcTemplate jdbcTemplate;
-
-    @Before
-    public void setup() {
-        jdbcPhoneDao = new JdbcPhoneDao();
-        DataSource dataSource = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2)
-                .addScript("/db/schema.sql")
-                .addScript("file:C:\\Users\\Katya\\Documents\\GitHub\\phoneshop\\demodata\\src\\main\\resources\\db\\demodata-phones.sql")
-                .build();
-        jdbcTemplate = new JdbcTemplate();
-        jdbcTemplate.setDataSource(dataSource);
-        ReflectionTestUtils.setField(jdbcPhoneDao, "jdbcTemplate", jdbcTemplate);
-    }
 
     @Test
     public void testFindAllReturnsNotNull() {
@@ -46,15 +30,6 @@ public class JdbcPhoneDaoTest {
 
     @Test
     public void testSaveNewObject() {
-        Phone phone = new Phone();
-        phone.setBrand("brand");
-        phone.setModel("model");
-        jdbcPhoneDao.save(phone);
-        Assert.assertEquals(phone.getBrand(), jdbcPhoneDao.get(8764L).get().getBrand());
-    }
-
-    @Test
-    public void testSaveObject() {
         Phone phone = new Phone();
         phone.setBrand("brand");
         phone.setModel("model");

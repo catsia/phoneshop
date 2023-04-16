@@ -10,18 +10,20 @@ import java.util.*;
 public class PhoneResultSetExtractor implements ResultSetExtractor<List<Phone>> {
     @Override
     public List<Phone> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-        Map<Long, Phone> phones = new HashMap<>();
+        List<Phone> phones = new ArrayList<>();
         PhoneRowMapper phoneRowMapper = new PhoneRowMapper();
         while (resultSet.next()) {
-            Long id = resultSet.getLong("id");
-            Phone phone = phones.get(id);
+            Phone phone = new Phone();
+            phone.setId(resultSet.getLong("id"));
+            phone.setBrand(resultSet.getString("brand"));
+            phone.setModel(resultSet.getString("model"));
 
-            if (phone == null) {
+            if (!phones.contains(phone)) {
                 phone = phoneRowMapper.mapRow(resultSet, 0);
-                phones.put(phone.getId(), phone);
+                phones.add(phone);
             }
-
-            Set<Color> colors = phones.get(id).getColors();
+            int index = phones.indexOf(phone);
+            Set<Color> colors = phones.get(index).getColors();
             if (colors == Collections.EMPTY_SET) {
                 colors = new HashSet<>();
             }
@@ -31,8 +33,8 @@ public class PhoneResultSetExtractor implements ResultSetExtractor<List<Phone>> 
             color.setCode(resultSet.getString("code"));
             colors.add(color);
 
-            phones.get(id).setColors(colors);
+            phones.get(index).setColors(colors);
         }
-        return new ArrayList<>(phones.values());
+        return phones;
     }
 }

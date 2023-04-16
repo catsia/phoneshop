@@ -11,19 +11,20 @@ import java.util.Optional;
 public class JdbcPhoneDao implements PhoneDao {
     @Resource
     private JdbcTemplate jdbcTemplate;
+    private final String GET_BY_ID_QUERY = "select * from phones where phones.id=";
+    private final String INSERT_QUERY = "insert into phones (id, brand, model, price, displaySizeInches, weightGr, lengthMm, widthMm, heightMm, announced, deviceType, os, displayResolution, pixelDensity, displayTechnology, backCameraMegapixels, frontCameraMegapixels, ramGb, internalStorageGb, batteryCapacityMah, talkTimeHours, standByTimeHours, bluetooth, positioning, imageUrl, description) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private final String FIND_ALL_QUERY = "select * from (select * from phones limit ? offset ?) as phone left join phone2color on phone.id = phone2color.phoneId left join colors on phone2color.colorId = colors.id";
 
     public Optional<Phone> get(final Long key) {
-        String getByIdQuery = "select * from phones where phones.id=";
-        List<Phone> phones = jdbcTemplate.query(getByIdQuery + key, new PhoneRowMapper());
+        List<Phone> phones = jdbcTemplate.query(GET_BY_ID_QUERY + key, new PhoneRowMapper());
         return Optional.ofNullable(!phones.isEmpty() ? phones.get(0) : null);
     }
 
     public void save(final Phone phone) {
-        String insertQuery = "insert into phones (id, brand, model, price, displaySizeInches, weightGr, lengthMm, widthMm, heightMm, announced, deviceType, os, displayResolution, pixelDensity, displayTechnology, backCameraMegapixels, frontCameraMegapixels, ramGb, internalStorageGb, batteryCapacityMah, talkTimeHours, standByTimeHours, bluetooth, positioning, imageUrl, description) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(insertQuery, phone.getId(), phone.getBrand(), phone.getModel(), phone.getPrice(), phone.getDisplaySizeInches(), phone.getWeightGr(), phone.getLengthMm(), phone.getWidthMm(), phone.getHeightMm(), phone.getAnnounced(), phone.getDeviceType(), phone.getOs(), phone.getDisplayResolution(), phone.getPixelDensity(), phone.getDisplayTechnology(), phone.getBackCameraMegapixels(), phone.getFrontCameraMegapixels(), phone.getRamGb(), phone.getInternalStorageGb(), phone.getBatteryCapacityMah(), phone.getTalkTimeHours(), phone.getStandByTimeHours(), phone.getBluetooth(), phone.getPositioning(), phone.getImageUrl(), phone.getDescription());
+        jdbcTemplate.update(INSERT_QUERY, phone.getId(), phone.getBrand(), phone.getModel(), phone.getPrice(), phone.getDisplaySizeInches(), phone.getWeightGr(), phone.getLengthMm(), phone.getWidthMm(), phone.getHeightMm(), phone.getAnnounced(), phone.getDeviceType(), phone.getOs(), phone.getDisplayResolution(), phone.getPixelDensity(), phone.getDisplayTechnology(), phone.getBackCameraMegapixels(), phone.getFrontCameraMegapixels(), phone.getRamGb(), phone.getInternalStorageGb(), phone.getBatteryCapacityMah(), phone.getTalkTimeHours(), phone.getStandByTimeHours(), phone.getBluetooth(), phone.getPositioning(), phone.getImageUrl(), phone.getDescription());
     }
 
     public List<Phone> findAll(int offset, int limit) {
-        return jdbcTemplate.query("select * from (select * from phones limit " + limit + " offset " + offset + ") as phone left join phone2color on phone.id = phone2color.phoneId left join colors on phone2color.colorId = colors.id", new PhoneResultSetExtractor());
+        return jdbcTemplate.query(FIND_ALL_QUERY, new PhoneResultSetExtractor(), limit, offset);
     }
 }
