@@ -1,7 +1,7 @@
 package core.model.phone;
 
 import com.es.core.model.phone.Phone;
-import com.es.core.model.phone.PhoneDao;
+import com.es.core.model.phone.dao.PhoneDao;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

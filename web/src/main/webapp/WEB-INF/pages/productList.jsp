@@ -11,10 +11,22 @@
     <thead>
       <tr>
         <td>Image</td>
-        <td>Brand</td>
-        <td>Model</td>
-        <td>Price</td>
+        <td>Brand
+        <tags:sort sort = "brand" order = "asc"/>
+        <tags:sort sort = "brand" order = "desc"/>
+        </td>
+        <td>Model
+        <tags:sort sort = "model" order = "asc"/>
+                <tags:sort sort = "model" order = "desc"/>
+                </td>
+        <td>Price
+        <tags:sort sort = "price" order = "asc"/>
+        <tags:sort sort = "price" order = "desc"/></td>
         <td>Colors</td>
+        <td>Display size
+        <tags:sort sort = "displaySizeInches" order = "asc"/>
+          <tags:sort sort = "displaySizeInches" order = "desc"/>
+        </td>
       </tr>
     </thead>
     <c:forEach var="phone" items="${phones}">
@@ -26,6 +38,7 @@
         <td>${phone.model}</td>
         <td>$ ${phone.price}</td>
         <td><c:forEach var="color" items="${phone.colors}">${color.code} </c:forEach></td>
+       <td>${phone.displaySizeInches}</td>
       </tr>
     </c:forEach>
   </table>

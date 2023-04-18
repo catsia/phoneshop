@@ -1,6 +1,8 @@
 package com.es.phoneshop.web.controller.pages;
 
-import com.es.core.model.phone.PhoneDao;
+import com.es.core.model.phone.dao.PhoneDao;
+import com.es.core.model.phone.dao.SortField;
+import com.es.core.model.phone.dao.SortOrder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,10 +18,20 @@ public class ProductListPageController {
     private PhoneDao phoneDao;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String showProductList(Model model, @RequestParam(required = false, defaultValue = "1", value = "page") Integer page) {
+    public String showProductList(Model model,
+                                  @RequestParam(required = false, defaultValue = "1", value = "page") Integer page,
+                                  @RequestParam(required = false, value = "sort") String sort,
+                                  @RequestParam(required = false, value = "order") String order) {
         int limit = 10;
         int offset = page * limit;
-        model.addAttribute("phones", phoneDao.findAll(offset, limit));
+
+        if (sort != null && order != null) {
+            SortField sortField = SortField.valueOf(sort);
+            SortOrder sortOrder = SortOrder.valueOf(order);
+            model.addAttribute("phones", phoneDao.findAllWithSortParameters(offset, limit, sortField, sortOrder));
+        } else {
+            model.addAttribute("phones", phoneDao.findAll(offset, limit));
+        }
         model.addAttribute("currentPage", page);
         model.addAttribute("previousPage", page == 1 ? page : page - 1);
         model.addAttribute("nextPage", page + 1);

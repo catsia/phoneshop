@@ -1,5 +1,6 @@
-package com.es.core.model.phone;
+package com.es.core.model.phone.dao;
 
+import com.es.core.model.phone.Phone;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,8 @@ public class JdbcPhoneDao implements PhoneDao {
     private final String INSERT_QUERY = "insert into phones (id, brand, model, price, displaySizeInches, weightGr, lengthMm, widthMm, heightMm, announced, deviceType, os, displayResolution, pixelDensity, displayTechnology, backCameraMegapixels, frontCameraMegapixels, ramGb, internalStorageGb, batteryCapacityMah, talkTimeHours, standByTimeHours, bluetooth, positioning, imageUrl, description) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private final String FIND_ALL_QUERY = "select * from (select * from phones join stocks on stocks.phoneId = phones.id and stocks.stock > 0 limit ? offset ?) as phone left join phone2color on phone.id = phone2color.phoneId left join colors on phone2color.colorId = colors.id";
 
+    private final String FIND_ALL_QUERY_WITH_SORT_PARAMETERS = "select * from (select * from phones join stocks on stocks.phoneId = phones.id and stocks.stock > 0 order by %s limit ? offset ?) as phone left join phone2color on phone.id = phone2color.phoneId left join colors on phone2color.colorId = colors.id";
+
     public Optional<Phone> get(final Long key) {
         List<Phone> phones = jdbcTemplate.query(GET_BY_ID_QUERY, new PhoneResultSetExtractor(), key);
         return Optional.ofNullable(!phones.isEmpty() ? phones.get(0) : null);
@@ -26,5 +29,11 @@ public class JdbcPhoneDao implements PhoneDao {
 
     public List<Phone> findAll(int offset, int limit) {
         return jdbcTemplate.query(FIND_ALL_QUERY, new PhoneResultSetExtractor(), limit, offset);
+    }
+
+    @Override
+    public List<Phone> findAllWithSortParameters(int offset, int limit, SortField sortField, SortOrder sortOrder) {
+        String find = String.format(FIND_ALL_QUERY_WITH_SORT_PARAMETERS, sortField.toString() + " " + sortOrder.toString());
+        return jdbcTemplate.query(find, new PhoneResultSetExtractor(), limit, offset);
     }
 }
