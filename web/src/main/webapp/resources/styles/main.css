@@ -1,0 +1,24 @@
+.paginationSection {
+    border: 1px solid #ddd;
+    text-align: center;
+    transition: background-color .3s;
+}
+
+table {
+  border-collapse: collapse;
+  border : 1px solid green;
+}
+#successes {
+    color: green;
+}
+.error {
+    color: red;
+}
+
+.cart {
+    text-align: right;
+}
+
+.sort {
+text-decoration: none;
+}

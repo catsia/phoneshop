@@ -1,5 +1,6 @@
 package com.es.phoneshop.web.controller.pages;
 
+import com.es.core.cart.Cart;
 import com.es.core.model.phone.dao.PhoneDao;
 import com.es.core.model.phone.dao.SortField;
 import com.es.core.model.phone.dao.SortOrder;
@@ -16,6 +17,8 @@ import javax.annotation.Resource;
 public class ProductListPageController {
     @Resource
     private PhoneDao phoneDao;
+    @Resource
+    private Cart cart;
 
     @RequestMapping(method = RequestMethod.GET)
     public String showProductList(Model model,
@@ -23,7 +26,7 @@ public class ProductListPageController {
                                   @RequestParam(required = false, value = "sort") String sort,
                                   @RequestParam(required = false, value = "order") String order) {
         int limit = 10;
-        int offset = page * limit;
+        int offset = (page - 1) * limit;
 
         if (sort != null && order != null) {
             SortField sortField = SortField.valueOf(sort);
@@ -32,6 +35,7 @@ public class ProductListPageController {
         } else {
             model.addAttribute("phones", phoneDao.findAll(offset, limit));
         }
+        model.addAttribute("cart", "My cart: " + cart.getTotalQuantity() + " items $ " + cart.getTotalCost());
         model.addAttribute("currentPage", page);
         model.addAttribute("previousPage", page == 1 ? page : page - 1);
         model.addAttribute("nextPage", page + 1);
