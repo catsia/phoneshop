@@ -13,6 +13,7 @@
         <td>Brand</td>
         <td>Model</td>
         <td>Price</td>
+        <td>Colors</td>
       </tr>
     </thead>
     <c:forEach var="phone" items="${phones}">
@@ -23,6 +24,7 @@
         <td>${phone.brand}</td>
         <td>${phone.model}</td>
         <td>$ ${phone.price}</td>
+        <td><c:forEach var="color" items="${phone.colors}">${color.code} </c:forEach></td>
       </tr>
     </c:forEach>
   </table>

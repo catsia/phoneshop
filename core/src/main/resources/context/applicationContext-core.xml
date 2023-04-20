@@ -10,17 +10,17 @@
     <context:component-scan base-package="com.es.core" />
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.h2.Driver" />
-        <property name="url" value="jdbc:h2:~/phoneshop/db/h2" />
-        <property name="username" value="sa" />
-        <property name="password" value="" />
+        <property name="driverClassName" value="${db.driver}" />
+        <property name="url" value="${db.url}" />
+        <property name="username" value="${db.user}" />
+        <property name="password" value="${db.password}" />
     </bean>
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-    <jdbc:initialize-database enabled="true" data-source="dataSource">
+    <jdbc:initialize-database enabled="${db.insertSchema}" data-source="dataSource">
         <jdbc:script location="classpath:db/schema.sql" />
     </jdbc:initialize-database>
 </beans>
