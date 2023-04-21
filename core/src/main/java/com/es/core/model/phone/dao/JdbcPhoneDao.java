@@ -17,6 +17,8 @@ public class JdbcPhoneDao implements PhoneDao {
     private final String FIND_ALL_QUERY = "select * from (select * from phones join stocks on stocks.phoneId = phones.id and stocks.stock > 0 limit ? offset ?) as phone left join phone2color on phone.id = phone2color.phoneId left join colors on phone2color.colorId = colors.id";
 
     private final String FIND_ALL_QUERY_WITH_SORT_PARAMETERS = "select * from (select * from phones join stocks on stocks.phoneId = phones.id and stocks.stock > 0 order by %s limit ? offset ?) as phone left join phone2color on phone.id = phone2color.phoneId left join colors on phone2color.colorId = colors.id";
+    private final String FIND_ALL_QUERY_WITH_SORT_PARAMETERS_ADN_SEARCH = "select * from (select * from phones join stocks on stocks.phoneId = phones.id and stocks.stock > 0 where lower(phones.model) like lower('%%%s%%') or lower(phones.model)=lower('%s') order by %s limit ? offset ?) as phone left join phone2color on phone.id = phone2color.phoneId left join colors on phone2color.colorId = colors.id";
+    private final String FIND_ALL_QUERY_WITH_SEARCH = "select * from (select * from phones join stocks on stocks.phoneId = phones.id and stocks.stock > 0 where lower(phones.model) like lower('%%%s%%') or lower(phones.model)=lower('%s') limit ? offset ?) as phone left join phone2color on phone.id = phone2color.phoneId left join colors on phone2color.colorId = colors.id";
 
     public Optional<Phone> get(final Long key) {
         List<Phone> phones = jdbcTemplate.query(GET_BY_ID_QUERY, new PhoneResultSetExtractor(), key);
@@ -32,8 +34,14 @@ public class JdbcPhoneDao implements PhoneDao {
     }
 
     @Override
-    public List<Phone> findAllWithSortParameters(int offset, int limit, SortField sortField, SortOrder sortOrder) {
-        String find = String.format(FIND_ALL_QUERY_WITH_SORT_PARAMETERS, sortField.toString() + " " + sortOrder.toString());
+    public List<Phone> findAllSortParametersAndSearch(int offset, int limit, SortField sortField, SortOrder sortOrder, String query) {
+        String find = String.format(FIND_ALL_QUERY_WITH_SORT_PARAMETERS_ADN_SEARCH, query, query, sortField.toString() + " " + sortOrder.toString());
+        return jdbcTemplate.query(find, new PhoneResultSetExtractor(), limit, offset);
+    }
+
+    @Override
+    public List<Phone> findAllSearch(int offset, int limit, String query) {
+        String find = String.format(FIND_ALL_QUERY_WITH_SEARCH, query, query);
         return jdbcTemplate.query(find, new PhoneResultSetExtractor(), limit, offset);
     }
 }

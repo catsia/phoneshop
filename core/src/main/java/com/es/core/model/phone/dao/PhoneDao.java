@@ -9,5 +9,6 @@ public interface PhoneDao {
     Optional<Phone> get(Long key);
     void save(Phone phone);
     List<Phone> findAll(int offset, int limit);
-    List<Phone> findAllWithSortParameters(int offset, int limit, SortField sortField, SortOrder sortOrder);
+    List<Phone> findAllSortParametersAndSearch(int offset, int limit, SortField sortField, SortOrder sortOrder, String query);
+    List<Phone> findAllSearch(int offset, int limit, String query);
 }

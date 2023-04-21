@@ -38,6 +38,11 @@
  </script>
 
 
+<form>
+    <input name = "query" value = "${param.query}">
+    <button>Search</button>
+  </form>
+
  <link href="${pageContext.request.contextPath}/resources/styles/main.css" rel="stylesheet"/>
  </head>
 <span id="successes"></span>
@@ -92,7 +97,7 @@
     </c:forEach>
   </table>
     <div class="paginationSection">
-            <a href="${pageContext.servletContext.contextPath}/productList?page=${previousPage}" >Previous</a>
+            <a href="${pageContext.servletContext.contextPath}/productList?page=${previousPage}&sort=${sort}&order=${order}&query=${param.query}" >Previous</a>
 
             <tags:pagination pageNumber="1"/>
             <tags:pagination pageNumber="2"/>
@@ -104,7 +109,7 @@
             <tags:pagination pageNumber="8"/>
             <tags:pagination pageNumber="9"/>
 
-            <a href="${pageContext.servletContext.contextPath}/productList?page=${nextPage}" >Next</a>
+            <a href="${pageContext.servletContext.contextPath}/productList?page=${nextPage}&sort=${sort}&order=${order}&query=${param.query}" >Next</a>
 
     </div>
 </p>

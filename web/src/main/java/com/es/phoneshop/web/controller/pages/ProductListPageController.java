@@ -24,16 +24,19 @@ public class ProductListPageController {
     public String showProductList(Model model,
                                   @RequestParam(required = false, defaultValue = "1", value = "page") Integer page,
                                   @RequestParam(required = false, value = "sort") String sort,
-                                  @RequestParam(required = false, value = "order") String order) {
+                                  @RequestParam(required = false, value = "order") String order,
+                                  @RequestParam(required = false, value = "query") String query) {
         int limit = 10;
         int offset = (page - 1) * limit;
-
-        if (sort != null && order != null) {
+        if ((sort != null && order != null) && !(sort.isEmpty() && order.isEmpty())) {
             SortField sortField = SortField.valueOf(sort);
             SortOrder sortOrder = SortOrder.valueOf(order);
-            model.addAttribute("phones", phoneDao.findAllWithSortParameters(offset, limit, sortField, sortOrder));
+            model.addAttribute("phones", phoneDao.findAllSortParametersAndSearch(offset, limit, sortField, sortOrder, query));
+        } else if (query != null && !query.isEmpty()) {
+            model.addAttribute("phones", phoneDao.findAllSearch(offset, limit, query));
         } else {
             model.addAttribute("phones", phoneDao.findAll(offset, limit));
+
         }
         model.addAttribute("cart", "My cart: " + cart.getTotalQuantity() + " items $ " + cart.getTotalCost());
         model.addAttribute("currentPage", page);
