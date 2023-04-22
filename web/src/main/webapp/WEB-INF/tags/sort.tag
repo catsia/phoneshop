@@ -3,7 +3,7 @@
 <%@ attribute name="sort" required="true" %>
 <%@ attribute name="order" required="true" %>
 
-<a href = "?page=${currentPage}&sort=${sort}&order=${order}&query=${param.query} ">
+<a href = "?page=${currentPage}&sort=${sort}&order=${order}&query=${param.query} " class="sort">
 <c:choose>
   <c:when test="${sort eq param.sort and order eq param.order}">
   <c:if test="${order eq 'asc'}">
