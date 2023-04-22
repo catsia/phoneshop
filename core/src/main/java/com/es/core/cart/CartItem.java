@@ -2,6 +2,8 @@ package com.es.core.cart;
 
 import com.es.core.model.phone.Phone;
 
+import java.util.Objects;
+
 public class CartItem {
     private Phone phone;
     private Long quantity;
@@ -25,5 +27,18 @@ public class CartItem {
 
     public void setQuantity(Long quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CartItem cartItem = (CartItem) o;
+        return Objects.equals(phone, cartItem.phone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(phone);
     }
 }
