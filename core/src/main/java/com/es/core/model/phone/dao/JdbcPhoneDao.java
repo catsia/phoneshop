@@ -19,6 +19,8 @@ public class JdbcPhoneDao implements PhoneDao {
     private final String FIND_ALL_QUERY_WITH_SORT_PARAMETERS = "select * from (select * from phones join stocks on stocks.phoneId = phones.id and stocks.stock > 0 where phones.price > 0 order by %s limit ? offset ?) as phone left join phone2color on phone.id = phone2color.phoneId left join colors on phone2color.colorId = colors.id";
     private final String FIND_ALL_QUERY_WITH_SORT_PARAMETERS_ADN_SEARCH = "select * from (select * from phones join stocks on stocks.phoneId = phones.id and stocks.stock > 0 where (lower(phones.model) like lower('%%%s%%') or lower(phones.model)=lower('%s')) and phones.price > 0 order by %s limit ? offset ?) as phone left join phone2color on phone.id = phone2color.phoneId left join colors on phone2color.colorId = colors.id";
     private final String FIND_ALL_QUERY_WITH_SEARCH = "select * from (select * from phones join stocks on stocks.phoneId = phones.id and stocks.stock > 0 where (lower(phones.model) like lower('%%%s%%') or lower(phones.model)=lower('%s')) and phones.price > 0 limit ? offset ?) as phone left join phone2color on phone.id = phone2color.phoneId left join colors on phone2color.colorId = colors.id";
+    private final String COUNT_FIND_ALL_QUERY = "select count(*) from phones join stocks on stocks.phoneId = phones.id and stocks.stock > 0 where phones.price > 0";
+    private final String COUNT_FIND_ALL_QUERY_WITH_SEARCH = "select count(*) from phones join stocks on stocks.phoneId = phones.id and stocks.stock > 0 where (lower(phones.model) like lower('%%%s%%') or lower(phones.model)=lower('%s')) and phones.price > 0";
 
     public Optional<Phone> get(final Long key) {
         List<Phone> phones = jdbcTemplate.query(GET_BY_ID_QUERY, new PhoneResultSetExtractor(), key);
@@ -30,15 +32,26 @@ public class JdbcPhoneDao implements PhoneDao {
     }
 
     public List<Phone> findAll(int offset, int limit, SortField sortField, SortOrder sortOrder, String query) {
+        String find;
         if ((sortField != null && sortOrder != null)) {
-            String find = String.format(FIND_ALL_QUERY_WITH_SORT_PARAMETERS_ADN_SEARCH, query, query, createSortString(sortField, sortOrder));
-            return jdbcTemplate.query(find, new PhoneResultSetExtractor(), limit, offset);
+            find = String.format(FIND_ALL_QUERY_WITH_SORT_PARAMETERS_ADN_SEARCH, query, query, createSortString(sortField, sortOrder));
         } else if (query != null && !query.isEmpty()) {
-            String find = String.format(FIND_ALL_QUERY_WITH_SEARCH, query, query);
-            return jdbcTemplate.query(find, new PhoneResultSetExtractor(), limit, offset);
+            find = String.format(FIND_ALL_QUERY_WITH_SEARCH, query, query);
         } else {
-            return jdbcTemplate.query(FIND_ALL_QUERY, new PhoneResultSetExtractor(), limit, offset);
+            find = FIND_ALL_QUERY;
         }
+        return jdbcTemplate.query(find, new PhoneResultSetExtractor(), limit, offset);
+    }
+
+    @Override
+    public int count(String query) {
+        String count;
+        if (query != null && !query.isEmpty()) {
+            count = String.format(COUNT_FIND_ALL_QUERY_WITH_SEARCH, query, query);
+        } else {
+            count = COUNT_FIND_ALL_QUERY;
+        }
+        return jdbcTemplate.queryForObject(count, Integer.class);
     }
 
     private String createSortString(SortField sortField, SortOrder sortOrder) {

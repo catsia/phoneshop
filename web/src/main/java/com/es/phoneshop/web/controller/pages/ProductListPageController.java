@@ -31,17 +31,26 @@ public class ProductListPageController {
                                   @RequestParam(required = false, value = "order") String order,
                                   @RequestParam(required = false, value = "query") String query) {
         int offset = (page - 1) * limit;
+
         SortField sortField = null;
         SortOrder sortOrder = null;
         if ((sort != null && order != null) && !(sort.isEmpty() && order.isEmpty())) {
             sortField = SortField.valueOf(sort);
             sortOrder = SortOrder.valueOf(order);
         }
+
+        int maxPage = (int) Math.ceil(phoneDao.count(query) / (double) limit);
+        if (page + 1 == maxPage) {
+            model.addAttribute("nextPage", null);
+        } else {
+            model.addAttribute("nextPage", page + 1);
+        }
+
         model.addAttribute("phones", phoneDao.findAll(offset, limit, sortField, sortOrder, query));
         model.addAttribute("cart", "My cart: " + cart.getTotalQuantity() + " items $ " + cart.getTotalCost());
         model.addAttribute("currentPage", page);
         model.addAttribute("previousPage", page == 1 ? page : page - 1);
-        model.addAttribute("nextPage", page + 1);
+        model.addAttribute("maxPage", maxPage);
         return "productList";
     }
 }

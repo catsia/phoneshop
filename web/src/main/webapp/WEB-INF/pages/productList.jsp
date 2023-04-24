@@ -61,19 +61,21 @@
     </c:forEach>
   </table>
     <div class="paginationSection">
-            <a href="${pageContext.servletContext.contextPath}/productList?page=${previousPage}&sort=${sort}&order=${order}&query=${param.query}" >Previous</a>
-
-            <tags:pagination pageNumber="1" currentPage="${currentPage}"/>
-            <tags:pagination pageNumber="2" currentPage="${currentPage}"/>
-            <tags:pagination pageNumber="3" currentPage="${currentPage}"/>
-            <tags:pagination pageNumber="4" currentPage="${currentPage}"/>
-            <tags:pagination pageNumber="5" currentPage="${currentPage}"/>
-            <tags:pagination pageNumber="6" currentPage="${currentPage}"/>
-            <tags:pagination pageNumber="7" currentPage="${currentPage}"/>
-            <tags:pagination pageNumber="8" currentPage="${currentPage}"/>
-            <tags:pagination pageNumber="9" currentPage="${currentPage}"/>
-
-            <a href="${pageContext.servletContext.contextPath}/productList?page=${nextPage}&sort=${sort}&order=${order}&query=${param.query}" >Next</a>
-
+            <c:if test="${currentPage ne '1'}">
+                   <a href="${pageContext.servletContext.contextPath}/productList?page=${previousPage}&sort=${sort}&order=${order}&query=${param.query}" >Previous</a>
+            </c:if>
+            <c:if test="${maxPage-currentPage <= 10}">
+                <c:forEach begin="${currentPage - (10-(maxPage-currentPage))}" end="${maxPage}" varStatus="loop">
+                    <tags:pagination pageNumber="${loop.index}" currentPage="${currentPage}"/>
+                </c:forEach>
+            </c:if>
+            <c:if test="${maxPage-currentPage > 10}">
+                <c:forEach begin="${currentPage}" end="${currentPage+9}" varStatus="loop">
+                    <tags:pagination pageNumber="${loop.index}" currentPage="${currentPage}"/>
+                </c:forEach>
+            </c:if>
+            <c:if test="${currentPage ne maxPage}">
+               <a href="${pageContext.servletContext.contextPath}/productList?page=${nextPage}&sort=${sort}&order=${order}&query=${param.query}">Next</a>
+            </c:if>
     </div>
 </p>

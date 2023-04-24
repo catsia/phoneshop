@@ -4,18 +4,12 @@
 <%@ attribute name="currentPage" required="true" %>
 
 <html>
-       <c:if test="${currentPage > 9}">
-           <c:set var = "page" value = "${currentPage+pageNumber-1}"/>
-       </c:if>
-       <c:if test="${currentPage <= 9}">
-            <c:set var = "page" value = "${pageNumber}"/>
-       </c:if>
-       <c:if test="${page eq currentPage}">
+       <c:if test="${pageNumber eq currentPage}">
            <b>
-           <a href="${pageContext.servletContext.contextPath}/productList?page=${page}&sort=${param.sort}&order=${param.order}&query=${param.query}" >${page}</a>
+           <a href="${pageContext.servletContext.contextPath}/productList?page=${pageNumber}&sort=${param.sort}&order=${param.order}&query=${param.query}" >${pageNumber}</a>
            </b>
        </c:if>
-       <c:if test="${page ne currentPage}">
-           <a href="${pageContext.servletContext.contextPath}/productList?page=${page}&sort=${param.sort}&order=${param.order}&query=${param.query}" >${page}</a>
+       <c:if test="${pageNumber ne currentPage}">
+           <a href="${pageContext.servletContext.contextPath}/productList?page=${pageNumber}&sort=${param.sort}&order=${param.order}&query=${param.query}" >${pageNumber}</a>
        </c:if>
 </html>
