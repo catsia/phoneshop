@@ -13,14 +13,15 @@ function CartAjax(phoneIdParam) {
             type: "POST",
             url:"ajaxCart",
             dataType: "text",
-            contentType : 'application/json; charset=utf-8',
+            contentType: 'application/json; charset=utf-8',
            data: data,
         }).done(function(data) {
             $('#successes').text(data);
             $('#error').text("");
-        }).fail(function(data) {
+            $('#'+phoneIdParam+'_error').text("");
+        }).fail(function(e) {
             $('#error').text("Error while adding to cart");
-            $('#'+phoneIdParam+'_error').text("Quantity can't be zero or negative");
+            $('#'+phoneIdParam+'_error').text(e.responseText);
             $('#successes').text("");
     });
 }
