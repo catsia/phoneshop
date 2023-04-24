@@ -12,6 +12,8 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
+    <context:property-placeholder location="/WEB-INF/conf/application.properties"/>
+
     <mvc:resources mapping="/resources/**" location="/resources/" cache-period="31556926"/>
     <mvc:annotation-driven/>
 

@@ -4,6 +4,7 @@ import com.es.core.cart.Cart;
 import com.es.core.model.phone.dao.PhoneDao;
 import com.es.core.model.phone.dao.SortField;
 import com.es.core.model.phone.dao.SortOrder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,13 +21,15 @@ public class ProductListPageController {
     @Resource
     private Cart cart;
 
+    @Value("${product.list.limit}")
+    private Integer limit;
+
     @RequestMapping(method = RequestMethod.GET)
     public String showProductList(Model model,
                                   @RequestParam(required = false, defaultValue = "1", value = "page") Integer page,
                                   @RequestParam(required = false, value = "sort") String sort,
                                   @RequestParam(required = false, value = "order") String order,
                                   @RequestParam(required = false, value = "query") String query) {
-        int limit = 10;
         int offset = (page - 1) * limit;
         SortField sortField = null;
         SortOrder sortOrder = null;
