@@ -19,13 +19,13 @@ public class JdbcPhoneDaoTest {
 
     @Test
     public void testFindAllReturnsNotNull() {
-        Assert.assertNotNull(jdbcPhoneDao.findAll(0, 10));
+        Assert.assertNotNull(jdbcPhoneDao.findAll(0, 10, null, null, null));
     }
 
     @Test
     public void testFindAllSizeEqualsLimit() {
         int limit = 10;
-        Assert.assertEquals(jdbcPhoneDao.findAll(0, limit).size(), limit);
+        Assert.assertEquals(jdbcPhoneDao.findAll(0, limit, null, null, null).size(), limit);
     }
 
     @Test

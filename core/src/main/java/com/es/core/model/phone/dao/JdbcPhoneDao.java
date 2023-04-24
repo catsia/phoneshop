@@ -29,19 +29,15 @@ public class JdbcPhoneDao implements PhoneDao {
         jdbcTemplate.update(INSERT_QUERY, phone.getId(), phone.getBrand(), phone.getModel(), phone.getPrice(), phone.getDisplaySizeInches(), phone.getWeightGr(), phone.getLengthMm(), phone.getWidthMm(), phone.getHeightMm(), phone.getAnnounced(), phone.getDeviceType(), phone.getOs(), phone.getDisplayResolution(), phone.getPixelDensity(), phone.getDisplayTechnology(), phone.getBackCameraMegapixels(), phone.getFrontCameraMegapixels(), phone.getRamGb(), phone.getInternalStorageGb(), phone.getBatteryCapacityMah(), phone.getTalkTimeHours(), phone.getStandByTimeHours(), phone.getBluetooth(), phone.getPositioning(), phone.getImageUrl(), phone.getDescription());
     }
 
-    public List<Phone> findAll(int offset, int limit) {
-        return jdbcTemplate.query(FIND_ALL_QUERY, new PhoneResultSetExtractor(), limit, offset);
-    }
-
-    @Override
-    public List<Phone> findAllSortParametersAndSearch(int offset, int limit, SortField sortField, SortOrder sortOrder, String query) {
-        String find = String.format(FIND_ALL_QUERY_WITH_SORT_PARAMETERS_ADN_SEARCH, query, query, sortField.toString() + " " + sortOrder.toString());
-        return jdbcTemplate.query(find, new PhoneResultSetExtractor(), limit, offset);
-    }
-
-    @Override
-    public List<Phone> findAllSearch(int offset, int limit, String query) {
-        String find = String.format(FIND_ALL_QUERY_WITH_SEARCH, query, query);
-        return jdbcTemplate.query(find, new PhoneResultSetExtractor(), limit, offset);
+    public List<Phone> findAll(int offset, int limit, SortField sortField, SortOrder sortOrder, String query) {
+        if ((sortField != null && sortOrder != null)) {
+            String find = String.format(FIND_ALL_QUERY_WITH_SORT_PARAMETERS_ADN_SEARCH, query, query, sortField + " " + sortOrder);
+            return jdbcTemplate.query(find, new PhoneResultSetExtractor(), limit, offset);
+        } else if (query != null && !query.isEmpty()) {
+            String find = String.format(FIND_ALL_QUERY_WITH_SEARCH, query, query);
+            return jdbcTemplate.query(find, new PhoneResultSetExtractor(), limit, offset);
+        } else {
+            return jdbcTemplate.query(FIND_ALL_QUERY, new PhoneResultSetExtractor(), limit, offset);
+        }
     }
 }

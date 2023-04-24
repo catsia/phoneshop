@@ -49,13 +49,13 @@ public class HttpSessionCartService implements CartService {
         throw new UnsupportedOperationException("TODO");
     }
 
-    private void calculateTotalCost(CartItem cartItem) {
+    public void calculateTotalCost(CartItem cartItem) {
         cart.setTotalCost(cart.getTotalCost().add
                 (cartItem.getPhone().getPrice().
                         multiply(BigDecimal.valueOf(cartItem.getQuantity()))));
     }
 
-    private void calculateTotalQuantity(CartItem cartItem) {
+    public void calculateTotalQuantity(CartItem cartItem) {
         cart.setTotalQuantity(cart.getTotalQuantity() + cartItem.getQuantity());
     }
 }
