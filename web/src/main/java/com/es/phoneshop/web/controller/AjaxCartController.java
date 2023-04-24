@@ -39,7 +39,7 @@ public class AjaxCartController {
             return new ResponseEntity<>(getError(result), HttpStatus.BAD_REQUEST);
         }
         cartService.addPhone(info.getPhoneId(), info.getQuantity());
-        return new ResponseEntity<>("Added to cart", HttpStatus.OK);
+        return new ResponseEntity<>("My cart: " + cartService.getCart().getTotalQuantity() + " items $ " + cartService.getCart().getTotalCost(), HttpStatus.OK);
     }
 
     private String getError(BindingResult bindingResult) {

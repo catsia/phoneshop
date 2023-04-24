@@ -22,8 +22,6 @@
 
     <bean id="cart" class="com.es.core.cart.Cart"/>
 
-    <bean id="cartService" class="com.es.core.cart.HttpSessionCartService"/>
-
     <jdbc:initialize-database enabled="${db.insertSchema}" data-source="dataSource">
         <jdbc:script location="classpath:db/schema.sql" />
     </jdbc:initialize-database>

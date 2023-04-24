@@ -16,7 +16,8 @@ function CartAjax(phoneIdParam) {
             contentType: 'application/json; charset=utf-8',
            data: data,
         }).done(function(data) {
-            $('#successes').text(data);
+            $('#successes').text("Added to cart");
+            $("#cartText").text(data);
             $('#error').text("");
             $('#'+phoneIdParam+'_error').text("");
         }).fail(function(e) {
