@@ -4,21 +4,7 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <p>
-<head>
-<script
-	src="${pageContext.request.contextPath}/resources/js/jquery-3.6.4.js"></script>
-
- <script src="${pageContext.request.contextPath}/resources/js/cartAjax.js">
- </script>
-
-
-<form>
-    <input name = "query" value = "${param.query}">
-    <button>Search</button>
-  </form>
-
- <link href="${pageContext.request.contextPath}/resources/styles/main.css" rel="stylesheet"/>
- </head>
+<tags:master/>
 <span id="successes"></span>
 <span id="error" class="error"></span>
 <p id="cartText" class="cart">${cart}</p>
