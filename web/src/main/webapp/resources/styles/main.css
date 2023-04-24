@@ -3,10 +3,35 @@
     text-align: center;
     transition: background-color .3s;
 }
-
+.pagination {
+ color: #6E6D70;
+    border: 1px solid #ddd;
+    text-decoration: none;
+}
 table {
-  border-collapse: collapse;
-  border : 1px solid green;
+	width: 100%;
+	border: none;
+	margin-bottom: 20px;
+}
+table thead th {
+	padding: 10px 15px;
+	background: #d8d8d8;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+table tbody td {
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	padding: 10px 15px;
+}
+table thead tr th:first-child, .table tbody tr td:first-child {
+	border-left: none;
+}
+table thead tr th:last-child, .table tbody tr td:last-child {
+	border-right: none;
+}
+table tbody tr:nth-child(even){
+	background: #f3f3f3;
 }
 #successes {
     color: green;
@@ -16,9 +41,49 @@ table {
 }
 
 .cart {
-    text-align: right;
+ width: 200px;
+  height: 20px;
+  border: 2px solid #000;
+  float: right;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #ddd;
+  border-color: #aaa;
+  text-align: center;
 }
 
 .sort {
 text-decoration: none;
+}
+.search {
+  color: #212529;
+  opacity: 0.4;
+}
+
+button {
+    align-items: center;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: none;
+
+      background: #6E6D70;
+      box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), inset 0px 0.5px 0.5px rgba(255, 255, 255, 0.5), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.12);
+      color: #DFDEDF;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+}
+
+.addToCart {
+    align-items: center;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: none;
+
+      background: #6E6D70;
+      box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), inset 0px 0.5px 0.5px rgba(255, 255, 255, 0.5), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.12);
+      color: #DFDEDF;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
 }

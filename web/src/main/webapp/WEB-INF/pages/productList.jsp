@@ -62,7 +62,7 @@
   </table>
     <div class="paginationSection">
             <c:if test="${currentPage ne '1'}">
-                   <a href="${pageContext.servletContext.contextPath}/productList?page=${previousPage}&sort=${sort}&order=${order}&query=${param.query}" >Previous</a>
+                   <a href="${pageContext.servletContext.contextPath}/productList?page=${previousPage}&sort=${sort}&order=${order}&query=${param.query}" class="pagination">Previous</a>
             </c:if>
             <c:if test="${maxPage-currentPage <= 10}">
                 <c:forEach begin="${currentPage - (10-(maxPage-currentPage))}" end="${maxPage}" varStatus="loop">
@@ -75,7 +75,7 @@
                 </c:forEach>
             </c:if>
             <c:if test="${currentPage ne maxPage}">
-               <a href="${pageContext.servletContext.contextPath}/productList?page=${nextPage}&sort=${sort}&order=${order}&query=${param.query}">Next</a>
+               <a href="${pageContext.servletContext.contextPath}/productList?page=${nextPage}&sort=${sort}&order=${order}&query=${param.query}" class="pagination">Next</a>
             </c:if>
     </div>
 </p>

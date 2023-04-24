@@ -10,7 +10,7 @@
 
 
 <form>
-    <input name = "query" value = "${param.query}">
+    <input name = "query" value = "${param.query}" class="search">
     <button>Search</button>
   </form>
 
