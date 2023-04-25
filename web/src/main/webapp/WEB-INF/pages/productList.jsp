@@ -5,6 +5,10 @@
 
 <p>
 <tags:master/>
+<form>
+    <input name = "query" value = "${param.query}" class="search">
+    <button>Search</button>
+  </form>
 <span id="successes"></span>
 <span id="error" class="error"></span>
 <p id="cartText" class="cart">${cart}</p>
@@ -36,10 +40,15 @@
     <c:forEach var="phone" items="${phones}">
       <tr>
         <td>
+          <a href="${pageContext.servletContext.contextPath}/productDetails/${phone.id}">
           <img src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${phone.imageUrl}">
+          </a>
         </td>
         <td>${phone.brand}</td>
-        <td>${phone.model}</td>
+        <td>
+          <a href="${pageContext.servletContext.contextPath}/productDetails/${phone.id}">
+            ${phone.model}</td>
+          </a>
         <td>
             <fmt:formatNumber value="${phone.price}" type="currency" currencySymbol="$"/>
         </td>
@@ -49,7 +58,6 @@
        </td>
        <form>
        <td>
-            <input type="hidden" value=${phone.id} id="phoneId" class="phoneId"/>
             <input type="number" id="${phone.id}_quantity" class="quantity" value="1"/>
             <p id="${phone.id}_error" class="error"></p>
        </td>

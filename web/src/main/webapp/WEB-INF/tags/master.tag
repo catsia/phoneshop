@@ -8,11 +8,5 @@
  <script src="${pageContext.request.contextPath}/resources/js/cartAjax.js">
  </script>
 
-
-<form>
-    <input name = "query" value = "${param.query}" class="search">
-    <button>Search</button>
-  </form>
-
  <link href="${pageContext.request.contextPath}/resources/styles/main.css" rel="stylesheet"/>
 </head>

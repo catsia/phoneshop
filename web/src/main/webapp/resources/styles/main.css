@@ -87,3 +87,10 @@ button {
       -webkit-user-select: none;
       touch-action: manipulation;
 }
+
+.col-sm-6 {
+ display: inline-block;
+  width: 300px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
