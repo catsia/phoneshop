@@ -33,7 +33,7 @@ public class QuantityValidator implements Validator {
         if (validatedJsonInfo.getQuantity() == 0) {
             errors.rejectValue("quantity", "Quantity is zero");
         }
-        if (currentStock.getStock() - validatedJsonInfo.getQuantity() <= 0) {
+        if (currentStock.getStock() - validatedJsonInfo.getQuantity() < 0) {
             errors.rejectValue("quantity", "Quantity is more than in stock");
         }
     }

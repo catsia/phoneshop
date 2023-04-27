@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,12 +29,14 @@ public class HttpSessionCartService implements CartService {
         if (phone.isPresent()) {
             CartItem cartItem = new CartItem(phone.get(), quantity);
             if (cart.getCartItems().contains(cartItem)) {
-                update(Collections.singletonList(cartItem));
+                int index = cart.getCartItems().indexOf(cartItem);
+                Long currentQuantity = cart.getCartItems().get(index).getQuantity();
+                cart.getCartItems().get(index).setQuantity(cartItem.getQuantity());
             } else {
                 cart.getCartItems().add(cartItem);
             }
-            calculateTotalCost(cartItem);
-            calculateTotalQuantity(cartItem);
+            calculateTotalCost();
+            calculateTotalQuantity();
         }
     }
 
@@ -43,23 +44,29 @@ public class HttpSessionCartService implements CartService {
     public void update(List<CartItem> cartItems) {
         cartItems.forEach(cartItem -> {
             int index = cart.getCartItems().indexOf(cartItem);
-            Long currentQuantity = cart.getCartItems().get(index).getQuantity();
-            cart.getCartItems().get(index).setQuantity(currentQuantity + cartItem.getQuantity());
+            cart.getCartItems().get(index).setQuantity(cartItem.getQuantity());
         });
+        calculateTotalCost();
+        calculateTotalQuantity();
     }
 
     @Override
     public void remove(Long phoneId) {
-        throw new UnsupportedOperationException("TODO");
+        Optional<Phone> phone = phoneDao.get(phoneId);
+        phone.ifPresent(value -> cart.getCartItems().remove(new CartItem(value, null)));
+        calculateTotalCost();
+        calculateTotalQuantity();
     }
 
-    public void calculateTotalCost(CartItem cartItem) {
-        cart.setTotalCost(cart.getTotalCost().add
-                (cartItem.getPhone().getPrice().
-                        multiply(BigDecimal.valueOf(cartItem.getQuantity()))));
+    public void calculateTotalCost() {
+        cart.setTotalCost(cart.getCartItems().stream()
+                .map(item -> item.getPhone().getPrice().multiply(new BigDecimal(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
     }
 
-    public void calculateTotalQuantity(CartItem cartItem) {
-        cart.setTotalQuantity(cart.getTotalQuantity() + cartItem.getQuantity());
+    public void calculateTotalQuantity() {
+        cart.setTotalQuantity(cart.getCartItems().stream()
+                .mapToLong(CartItem::getQuantity)
+                .sum());
     }
 }

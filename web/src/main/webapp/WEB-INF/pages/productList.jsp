@@ -11,7 +11,9 @@
   </form>
 <span id="successes"></span>
 <span id="error" class="error"></span>
+<a href="${pageContext.servletContext.contextPath}/cart">
 <p id="cartText" class="cart">${cart}</p>
+</a>
 
   <table border="1px">
     <thead>

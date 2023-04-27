@@ -8,7 +8,7 @@
 <span id="successes"></span>
 <span id="error" class="error"></span>
 <p id="cartText" class="cart">${cart}</p>
-<a href="<c:url value="/productList"/>"><button type="button" class="btn btn-info">Back to product list</button></a>
+<a href="${pageContext.servletContext.contextPath}/"><button type="button" class="btn btn-info">Back to product list</button></a>
  <body>
      <div class="container">
        <div class="row">
