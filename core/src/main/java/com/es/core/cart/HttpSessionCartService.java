@@ -31,7 +31,7 @@ public class HttpSessionCartService implements CartService {
             if (cart.getCartItems().contains(cartItem)) {
                 int index = cart.getCartItems().indexOf(cartItem);
                 Long currentQuantity = cart.getCartItems().get(index).getQuantity();
-                cart.getCartItems().get(index).setQuantity(cartItem.getQuantity());
+                cart.getCartItems().get(index).setQuantity(currentQuantity + cartItem.getQuantity());
             } else {
                 cart.getCartItems().add(cartItem);
             }

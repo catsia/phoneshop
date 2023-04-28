@@ -1,7 +1,7 @@
 function CartAjax(phoneIdParam) {
     var quantity = $('#'+phoneIdParam+'_quantity').val();
     var jsonData = {
-       "phoneId": phoneIdParam,
+       "id": phoneIdParam,
        "quantity": quantity
     };
     var data = JSON.stringify(jsonData);
@@ -11,7 +11,7 @@ function CartAjax(phoneIdParam) {
                         "Content-Type": "application/json"
             },
             type: "POST",
-            url:"ajaxCart",
+            url:"/phoneshop-web/ajaxCart",
             dataType: "text",
             contentType: 'application/json; charset=utf-8',
            data: data,

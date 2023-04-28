@@ -9,7 +9,12 @@
 <a href="${pageContext.servletContext.contextPath}/"><button type="button">Back to product list</button></a>
 <c:if test="${not empty cartItems}">
 <p id="cartText" class="cart">${cart}</p>
-
+<c:if test="${not empty errors}">
+    <span class="error">Error while updating the cart</span>
+</c:if>
+<c:if test="${empty errors && not empty successes}">
+    <span id="successes">${successes}</span>
+</c:if>
   <form:form method ="post" modelAttribute="cartItemReducedDto">
   <input type="hidden" name="_method" value="put" />
   <table border="1px">
@@ -58,7 +63,11 @@
        <td>
             <form:hidden path="cartItemReduced[${i.index}].id" value="${cartItem.phone.id}"/>
             <form:input path="cartItemReduced[${i.index}].quantity" type="number"  value="${cartItem.quantity}"/>
-            <p id="${cartItem.phone.id}_error" class="error"></p>
+            <c:forEach var="error" items="${errors}">
+                <c:if test="${error.key eq i.index}">
+                    <p class="error"> ${error.value}</p>
+                </c:if>
+            </c:forEach>
        </td>
        <td>
             <form method="post" id="deleteForm${cartItem.phone.id}">

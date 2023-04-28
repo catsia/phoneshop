@@ -1,13 +1,13 @@
 package com.es.phoneshop.web.controller;
 
+import com.es.core.cart.CartItemReduced;
 import com.es.core.cart.CartService;
+import com.es.phoneshop.web.controller.support.GetErrorFromBindingResult;
 import com.es.phoneshop.web.controller.validator.QuantityValidator;
-import com.es.phoneshop.web.controller.validator.ValidatedJsonInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,31 +25,24 @@ public class AjaxCartController {
     private CartService cartService;
 
     @Resource
-    private QuantityValidator validator;
+    private QuantityValidator quantityValidator;
+
+    @Resource
+    private GetErrorFromBindingResult getError;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(validator);
+        binder.setValidator(quantityValidator);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> addPhone(@Valid @RequestBody ValidatedJsonInfo info,
+    public ResponseEntity<String> addPhone(@Valid @RequestBody CartItemReduced cartItemReduced,
                                            BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(getError(result), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(getError.getError(result), HttpStatus.BAD_REQUEST);
         }
-        cartService.addPhone(info.getPhoneId(), info.getQuantity());
+        cartService.addPhone(cartItemReduced.getId(), cartItemReduced.getQuantity());
         return new ResponseEntity<>("My cart: " + cartService.getCart().getTotalQuantity() + " items $ " + cartService.getCart().getTotalCost(), HttpStatus.OK);
     }
 
-    private String getError(BindingResult bindingResult) {
-        String error = "";
-        for (Object object : bindingResult.getAllErrors()) {
-            if (object instanceof FieldError) {
-                FieldError fieldError = (FieldError) object;
-                error += fieldError.getCode() + '\n';
-            }
-        }
-        return error;
-    }
 }

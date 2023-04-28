@@ -1,10 +1,8 @@
 package com.es.core.cart;
 
-import javax.validation.constraints.Min;
-
 public class CartItemReduced {
     private Long id;
-    @Min(1)
+
     private Long quantity;
 
     public CartItemReduced() {

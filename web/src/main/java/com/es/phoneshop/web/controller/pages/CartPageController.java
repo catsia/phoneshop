@@ -3,16 +3,18 @@ package com.es.phoneshop.web.controller.pages;
 import com.es.core.cart.CartItemConverter;
 import com.es.core.cart.CartItemReducedDto;
 import com.es.core.cart.CartService;
+import com.es.phoneshop.web.controller.support.GetErrorFromBindingResult;
+import com.es.phoneshop.web.controller.validator.QuantityValidatorForDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/cart")
@@ -21,10 +23,28 @@ public class CartPageController {
     private CartService cartService;
 
     @Resource
+    private QuantityValidatorForDto validatorForDto;
+
+    @Resource
     private CartItemConverter cartItemConverter;
+
+    @Resource
+    private GetErrorFromBindingResult getError;
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.setValidator(validatorForDto);
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public String getCart(Model model) {
+        Map<String, String> errors = (Map<String, String>) model.asMap().get("errors");
+
+        if (errors != null && !errors.isEmpty()) {
+            model.addAttribute("errors", errors);
+        } else {
+            model.addAttribute("successes", "Cart successfully updated");
+        }
         model.addAttribute("cartItemReducedDto", new CartItemReducedDto());
         model.addAttribute("cart", "My cart: " + cartService.getCart().getTotalQuantity() + " items $ " + cartService.getCart().getTotalCost());
         model.addAttribute("cartItems", cartService.getCart().getCartItems());
@@ -32,8 +52,12 @@ public class CartPageController {
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public String updateCart(@Valid @ModelAttribute("cartItemReducedDto") CartItemReducedDto cartItemReducedDto, BindingResult result, Model model) {
-        cartService.update(cartItemConverter.convertToCartItems(cartItemReducedDto.getCartItemReduced()));
+    public String updateCart(@Valid @ModelAttribute("cartItemReducedDto") CartItemReducedDto cartItemReducedDto, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errors", getError.getErrors(result));
+        } else {
+            cartService.update(cartItemConverter.convertToCartItems(cartItemReducedDto.getCartItemReduced()));
+        }
         return "redirect:/cart";
     }
 

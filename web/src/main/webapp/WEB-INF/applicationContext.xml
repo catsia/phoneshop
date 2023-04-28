@@ -10,6 +10,8 @@
     <import resource="classpath:context/applicationContext-demoda.xml"/>
     <context:property-placeholder location="/WEB-INF/conf/application.properties"/>
 
-    <bean id="validator" class="com.es.phoneshop.web.controller.validator.QuantityValidator"/>
+    <bean id="quantityValidator" class="com.es.phoneshop.web.controller.validator.QuantityValidator"/>
+    <bean id="validatorForDto" class="com.es.phoneshop.web.controller.validator.QuantityValidatorForDto"/>
+    <bean id="getError" class="com.es.phoneshop.web.controller.support.GetErrorFromBindingResult"/>
 
 </beans>
