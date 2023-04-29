@@ -39,11 +39,12 @@ public class CartPageController {
     @RequestMapping(method = RequestMethod.GET)
     public String getCart(Model model) {
         Map<String, String> errors = (Map<String, String>) model.asMap().get("errors");
+        String successes = (String) model.asMap().get("successes");
 
         if (errors != null && !errors.isEmpty()) {
             model.addAttribute("errors", errors);
-        } else {
-            model.addAttribute("successes", "Cart successfully updated");
+        } else if (successes != null && !successes.isEmpty()) {
+            model.addAttribute("successes", successes);
         }
         model.addAttribute("cartItemReducedDto", new CartItemReducedDto());
         model.addAttribute("cart", "My cart: " + cartService.getCart().getTotalQuantity() + " items $ " + cartService.getCart().getTotalCost());
@@ -56,6 +57,7 @@ public class CartPageController {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", getError.getErrors(result));
         } else {
+            redirectAttributes.addFlashAttribute("successes", "Cart successfully updated");
             cartService.update(cartItemConverter.convertToCartItems(cartItemReducedDto.getCartItemReduced()));
         }
         return "redirect:/cart";
