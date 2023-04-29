@@ -1,28 +1,65 @@
 package com.es.core.cart;
 
+import com.es.core.model.phone.Phone;
+import com.es.core.model.phone.dao.PhoneDao;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HttpSessionCartService implements CartService {
+
+    @Resource
+    private Cart cart;
+
+    @Resource
+    private PhoneDao phoneDao;
+
     @Override
     public Cart getCart() {
-        throw new UnsupportedOperationException("TODO");
+        return cart;
     }
 
     @Override
     public void addPhone(Long phoneId, Long quantity) {
-        throw new UnsupportedOperationException("TODO");
+        Optional<Phone> phone = phoneDao.get(phoneId);
+        if (phone.isPresent()) {
+            CartItem cartItem = new CartItem(phone.get(), quantity);
+            if (cart.getCartItems().contains(cartItem)) {
+                update(Collections.singletonList(cartItem));
+            } else {
+                cart.getCartItems().add(cartItem);
+            }
+            calculateTotalCost(cartItem);
+            calculateTotalQuantity(cartItem);
+        }
     }
 
     @Override
-    public void update(Map<Long, Long> items) {
-        throw new UnsupportedOperationException("TODO");
+    public void update(List<CartItem> cartItems) {
+        cartItems.forEach(cartItem -> {
+            int index = cart.getCartItems().indexOf(cartItem);
+            Long currentQuantity = cart.getCartItems().get(index).getQuantity();
+            cart.getCartItems().get(index).setQuantity(currentQuantity + cartItem.getQuantity());
+        });
     }
 
     @Override
     public void remove(Long phoneId) {
         throw new UnsupportedOperationException("TODO");
+    }
+
+    public void calculateTotalCost(CartItem cartItem) {
+        cart.setTotalCost(cart.getTotalCost().add
+                (cartItem.getPhone().getPrice().
+                        multiply(BigDecimal.valueOf(cartItem.getQuantity()))));
+    }
+
+    public void calculateTotalQuantity(CartItem cartItem) {
+        cart.setTotalQuantity(cart.getTotalQuantity() + cartItem.getQuantity());
     }
 }

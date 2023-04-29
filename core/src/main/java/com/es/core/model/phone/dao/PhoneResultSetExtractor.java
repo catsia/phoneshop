@@ -1,5 +1,7 @@
-package com.es.core.model.phone;
+package com.es.core.model.phone.dao;
 
+import com.es.core.model.phone.Color;
+import com.es.core.model.phone.Phone;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 

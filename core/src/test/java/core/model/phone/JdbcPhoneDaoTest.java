@@ -1,7 +1,7 @@
 package core.model.phone;
 
 import com.es.core.model.phone.Phone;
-import com.es.core.model.phone.PhoneDao;
+import com.es.core.model.phone.dao.PhoneDao;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,13 +19,13 @@ public class JdbcPhoneDaoTest {
 
     @Test
     public void testFindAllReturnsNotNull() {
-        Assert.assertNotNull(jdbcPhoneDao.findAll(0, 10));
+        Assert.assertNotNull(jdbcPhoneDao.findAll(0, 10, null, null, null));
     }
 
     @Test
     public void testFindAllSizeEqualsLimit() {
         int limit = 10;
-        Assert.assertEquals(jdbcPhoneDao.findAll(0, limit).size(), limit);
+        Assert.assertEquals(jdbcPhoneDao.findAll(0, limit, null, null, null).size(), limit);
     }
 
     @Test
