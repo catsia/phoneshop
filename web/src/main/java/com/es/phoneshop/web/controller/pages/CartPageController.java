@@ -3,7 +3,7 @@ package com.es.phoneshop.web.controller.pages;
 import com.es.core.cart.CartItemConverter;
 import com.es.core.cart.CartItemReducedDto;
 import com.es.core.cart.CartService;
-import com.es.phoneshop.web.controller.support.GetErrorFromBindingResult;
+import com.es.phoneshop.web.controller.support.BindingResultErrorHandler;
 import com.es.phoneshop.web.controller.validator.QuantityValidatorForDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,9 +29,9 @@ public class CartPageController {
     private CartItemConverter cartItemConverter;
 
     @Resource
-    private GetErrorFromBindingResult getError;
+    private BindingResultErrorHandler bindingResultErrorHandler;
 
-    @InitBinder
+    @InitBinder("cartItemReducedDto")
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(validatorForDto);
     }
@@ -47,15 +47,15 @@ public class CartPageController {
             model.addAttribute("successes", successes);
         }
         model.addAttribute("cartItemReducedDto", new CartItemReducedDto());
-        model.addAttribute("cart", "My cart: " + cartService.getCart().getTotalQuantity() + " items $ " + cartService.getCart().getTotalCost());
+        model.addAttribute("cart", cartService.getCart());
         model.addAttribute("cartItems", cartService.getCart().getCartItems());
         return "cart";
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public String updateCart(@Valid @ModelAttribute("cartItemReducedDto") CartItemReducedDto cartItemReducedDto, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+    public String updateCart(@Valid @ModelAttribute("cartItemReducedDto") CartItemReducedDto cartItemReducedDto, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("errors", getError.getErrors(result));
+            redirectAttributes.addFlashAttribute("errors", bindingResultErrorHandler.getErrors(result));
         } else {
             redirectAttributes.addFlashAttribute("successes", "Cart successfully updated");
             cartService.update(cartItemConverter.convertToCartItems(cartItemReducedDto.getCartItemReduced()));

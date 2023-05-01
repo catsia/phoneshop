@@ -13,14 +13,14 @@ import javax.annotation.Resource;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(value = "/productDetails/{phoneId}")
+@RequestMapping(value = "/productDetails/*")
 public class ProductDetailsPageController {
     @Resource
     private PhoneDao phoneDao;
     @Resource
     private Cart cart;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/productDetails/{phoneId}", method = RequestMethod.GET)
     public String showDetails(Model model,
                               @PathVariable(value = "phoneId") Long phoneId) {
         Optional<Phone> phone = phoneDao.get(phoneId);

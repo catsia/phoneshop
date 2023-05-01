@@ -7,7 +7,9 @@
 <tags:master/>
 <span id="successes"></span>
 <span id="error" class="error"></span>
+<a href="${pageContext.servletContext.contextPath}/cart">
 <p id="cartText" class="cart">${cart}</p>
+</a>
 <a href="${pageContext.servletContext.contextPath}/"><button type="button" class="btn btn-info">Back to product list</button></a>
  <body>
      <div class="container">

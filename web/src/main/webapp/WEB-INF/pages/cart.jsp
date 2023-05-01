@@ -8,7 +8,7 @@
 <tags:master/>
 <a href="${pageContext.servletContext.contextPath}/"><button type="button">Back to product list</button></a>
 <c:if test="${not empty cartItems}">
-<p id="cartText" class="cart">${cart}</p>
+<p id="cartText" class="cart">My cart: ${cart.totalQuantity} items $ ${cart.totalCost}</p>
 <c:if test="${not empty errors}">
     <span class="error">Error while updating the cart</span>
 </c:if>
@@ -41,7 +41,7 @@
         <td>Action</td>
       </tr>
     </thead>
-    <c:forEach var="cartItem" items="${cartItems}" varStatus="i">
+    <c:forEach var="cartItem" items="${cart.cartItems}" varStatus="i">
       <tr>
         <td>
           <a href="${pageContext.servletContext.contextPath}/productDetails/${cartItem.phone.id}">
@@ -84,19 +84,8 @@
   <a href="${pageContext.servletContext.contextPath}/order"><button type="button" class="btn btn-info">Order</button></a>
 
 </c:if>
-<c:if test="${empty cartItems}">
+<c:if test="${empty cart.cartItems}">
 <h2 class="emptyCart">Sorry, your cart is empty</h2>
 
 </c:if>
-<script>
-function onDeletePhone(id) {
-  const form = document.getElementById('deleteForm' + id);
-  const input = document.createElement('input');
-  input.setAttribute('type', 'hidden');
-  input.setAttribute('name', 'phoneId');
-  input.setAttribute('value', id);
-  form.appendChild(input);
-  form.submit();
-}
-</script>
 </p>

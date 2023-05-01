@@ -7,6 +7,8 @@
 
  <script src="${pageContext.request.contextPath}/resources/js/cartAjax.js">
  </script>
+  <script src="${pageContext.request.contextPath}/resources/js/onDeletePhone.js">
+  </script>
 
  <link href="${pageContext.request.contextPath}/resources/styles/main.css" rel="stylesheet"/>
 </head>
