@@ -55,7 +55,7 @@ public class CartPageController {
     @RequestMapping(method = RequestMethod.PUT)
     public String updateCart(@Valid @ModelAttribute("cartItemReducedDto") CartItemReducedDto cartItemReducedDto, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("errors", bindingResultErrorHandler.getErrors(result));
+            redirectAttributes.addFlashAttribute("errors", bindingResultErrorHandler.getErrorsForCart(result));
         } else {
             redirectAttributes.addFlashAttribute("successes", "Cart successfully updated");
             cartService.update(cartItemConverter.convertToCartItems(cartItemReducedDto.getCartItemReduced()));

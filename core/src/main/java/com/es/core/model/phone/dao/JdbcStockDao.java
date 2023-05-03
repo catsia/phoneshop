@@ -14,9 +14,15 @@ public class JdbcStockDao implements StockDao {
     private JdbcTemplate jdbcTemplate;
 
     private final String GET_STOCK_BY_PHONE_ID_QUERY = "select * from phones join stocks on stocks.phoneId = ?";
+    private final String UPDATE_STOCK_BY_PHONE_ID_QUERY = "UPDATE stocks SET stock = ? where stocks.phoneId = ?";
 
     @Override
     public Optional<Stock> get(Long key) {
         return jdbcTemplate.query(GET_STOCK_BY_PHONE_ID_QUERY, new BeanPropertyRowMapper<>(Stock.class), key).stream().findAny();
+    }
+
+    @Override
+    public void update(Long key, Long newStock) {
+        jdbcTemplate.update(UPDATE_STOCK_BY_PHONE_ID_QUERY, newStock, key);
     }
 }

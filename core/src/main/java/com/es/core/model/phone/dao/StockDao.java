@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface StockDao {
     Optional<Stock> get(Long key);
+
+    void update(Long key, Long newStock);
 }

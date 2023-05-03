@@ -15,7 +15,7 @@ public class BindingResultErrorHandler {
                 .collect(Collectors.joining("\n"));
     }
 
-    public Map<String, String> getErrors(BindingResult bindingResult) {
+    public Map<String, String> getErrorsForCart(BindingResult bindingResult) {
         return bindingResult.getFieldErrors().stream()
                 .filter(fieldError -> fieldError.getField().startsWith("cartItemReduced[") && fieldError.getCode() != null)
                 .collect(Collectors.toMap(
@@ -25,6 +25,14 @@ public class BindingResultErrorHandler {
                             System.out.println(fieldError.getField().substring(startIndex, endIndex));
                             return fieldError.getField().substring(startIndex, endIndex);
                         },
+                        FieldError::getCode
+                ));
+    }
+
+    public Map<String, String> getErrors(BindingResult bindingResult) {
+        return bindingResult.getFieldErrors().stream()
+                .collect(Collectors.toMap(
+                        FieldError::getField,
                         FieldError::getCode
                 ));
     }

@@ -21,8 +21,16 @@ public class Order
     private String lastName;
     private String deliveryAddress;
     private String contactPhoneNo;
-
     private OrderStatus status;
+    private String additionalInformation;
+
+    public String getAdditionalInformation() {
+        return additionalInformation;
+    }
+
+    public void setAdditionalInformation(String additionalInformation) {
+        this.additionalInformation = additionalInformation;
+    }
 
     public Long getId() {
         return id;
