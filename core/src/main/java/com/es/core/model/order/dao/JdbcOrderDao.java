@@ -30,8 +30,10 @@ public class JdbcOrderDao implements OrderDao {
                 .addValue("lastName", order.getLastName())
                 .addValue("deliveryAddress", order.getDeliveryAddress())
                 .addValue("contactPhoneNo", order.getContactPhoneNo())
-                .addValue("additionInformation", order.getAdditionalInformation())
-                .addValue("total", order.getTotalPrice())
+                .addValue("additionalInformation", order.getAdditionalInformation())
+                .addValue("subtotal", order.getSubtotal())
+                .addValue("deliveryPrice", order.getDeliveryPrice())
+                .addValue("totalPrice", order.getTotalPrice())
                 .addValue("status", order.getStatus().name(), Types.VARCHAR);
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("orders");

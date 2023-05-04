@@ -6,7 +6,7 @@
 
 <p>
 <tags:master/>
-
+<h2>Order number: ${order.id}</h2>
 
   <table border="1px">
     <thead>
@@ -103,11 +103,7 @@
         </tr>
         <tr>
             <c:if test="${not empty order.additionalInformation}">
-                        <td>
-
-                ${order.additionalInformation}
-                            </td>
-
+                        <td>${order.additionalInformation}</td>
             </c:if>
         </tr>
 

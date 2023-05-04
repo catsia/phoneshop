@@ -53,22 +53,23 @@ public class OrderPageController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String placeOrder(@Valid @ModelAttribute("orderReduced") OrderReduced order, BindingResult result, RedirectAttributes redirectAttributes, Model model) throws OutOfStockException {
+    public String placeOrder(@Valid @ModelAttribute("orderReduced") OrderReduced orderReduced, BindingResult result, RedirectAttributes redirectAttributes, Model model) throws OutOfStockException {
         if (result.hasErrors()) {
             bindingResultErrorHandler.getErrors(result).entrySet().stream().forEach(stringStringEntry ->
                     model.addAttribute(stringStringEntry.getKey() + "Error", stringStringEntry.getValue())
             );
+            model.addAttribute("order", orderConverter.convert(orderReduced));
             return "order";
         }
         long id;
+        Order order = orderConverter.convert(orderReduced);
         try {
-            id = orderService.placeOrder(orderConverter.convert(order));
+            id = orderService.placeOrder(order);
         } catch (OutOfStockException e) {
             model.addAttribute("outOfStockError", e.getMessage());
             model.addAttribute("order", order);
             return "order";
         }
-        redirectAttributes.addFlashAttribute("order", order);
         cartService.removeAll();
         return "redirect:/orderOverview/" + id;
     }

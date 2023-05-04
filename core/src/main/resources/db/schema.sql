@@ -60,7 +60,7 @@ create table orders (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   subtotal FLOAT,
   deliveryPrice FLOAT,
-  totalCost FLOAT,
+  totalPrice FLOAT,
   firstName VARCHAR(100),
   lastName VARCHAR(100),
   deliveryAddress VARCHAR(200),
