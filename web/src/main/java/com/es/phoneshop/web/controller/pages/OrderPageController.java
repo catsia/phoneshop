@@ -60,14 +60,15 @@ public class OrderPageController {
             );
             return "order";
         }
+        long id;
         try {
-            orderService.placeOrder(orderConverter.convert(order));
+            id = orderService.placeOrder(orderConverter.convert(order));
         } catch (OutOfStockException e) {
             model.addAttribute("outOfStockError", e.getMessage());
             model.addAttribute("order", order);
             return "order";
         }
         redirectAttributes.addFlashAttribute("order", order);
-        return "redirect:/orderOverview";
+        return "redirect:/orderOverview/" + id;
     }
 }

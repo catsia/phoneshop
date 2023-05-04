@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,8 +47,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void placeOrder(Order order) throws OutOfStockException {
-        order.setId(orderDao.save(order));
+    public long placeOrder(Order order) throws OutOfStockException {
+        long id = orderDao.save(order);
+        order.setId(id);
         for (OrderItem orderItem : order.getOrderItems()) {
             Stock stock = stockDao.get(orderItem.getPhone().getId()).get();
             if (stock.getStock() < orderItem.getQuantity()) {
@@ -56,5 +58,16 @@ public class OrderServiceImpl implements OrderService {
         }
         order.getOrderItems().removeIf(orderItem -> stockDao.get(orderItem.getPhone().getId()).get().getStock() < orderItem.getQuantity());
         orderItemDao.save(order);
+        return id;
+    }
+
+    @Override
+    public Order getOrder(Long id) throws OrderNotFound {
+        Optional<Order> order = orderDao.get(id);
+        if (!order.isPresent()) {
+            throw new OrderNotFound("No order with number " + id + " found");
+        }
+        order.get().setOrderItems(orderItemDao.getOrderItems(id));
+        return order.get();
     }
 }
