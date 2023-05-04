@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +59,13 @@ public class HttpSessionCartService implements CartService {
     public void remove(Long phoneId) {
         Optional<Phone> phone = phoneDao.get(phoneId);
         phone.ifPresent(value -> cart.getCartItems().remove(new CartItem(value, null)));
+        calculateTotalCost();
+        calculateTotalQuantity();
+    }
+
+    @Override
+    public void removeAll() {
+        cart.setCartItems(new ArrayList<>());
         calculateTotalCost();
         calculateTotalQuantity();
     }

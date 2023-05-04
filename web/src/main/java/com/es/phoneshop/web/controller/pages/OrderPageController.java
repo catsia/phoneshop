@@ -69,6 +69,7 @@ public class OrderPageController {
             return "order";
         }
         redirectAttributes.addFlashAttribute("order", order);
+        cartService.removeAll();
         return "redirect:/orderOverview/" + id;
     }
 }
