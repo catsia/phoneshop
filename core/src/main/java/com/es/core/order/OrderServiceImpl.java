@@ -7,10 +7,10 @@ import com.es.core.model.order.dao.OrderDao;
 import com.es.core.model.order.dao.OrderItemDao;
 import com.es.core.model.phone.Stock;
 import com.es.core.model.phone.dao.StockDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,14 +21,18 @@ public class OrderServiceImpl implements OrderService {
     @Value("${delivery.price}")
     private BigDecimal deliveryPrice;
 
-    @Resource
     private OrderDao orderDao;
 
-    @Resource
     private OrderItemDao orderItemDao;
 
-    @Resource
     private StockDao stockDao;
+
+    @Autowired
+    public OrderServiceImpl(OrderDao orderDao, OrderItemDao orderItemDao, StockDao stockDao) {
+        this.orderDao = orderDao;
+        this.orderItemDao = orderItemDao;
+        this.stockDao = stockDao;
+    }
 
 
     @Override
