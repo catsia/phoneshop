@@ -64,7 +64,7 @@
             <form:hidden path="cartItemReduced[${i.index}].id" value="${cartItem.phone.id}"/>
             <form:input path="cartItemReduced[${i.index}].quantity" type="number"  value="${cartItem.quantity}"/>
             <c:forEach var="error" items="${errors}">
-                <c:if test="${error.key eq i.index}">
+                <c:if test="${error.key eq cartItem.phone.id}">
                     <p class="error"> ${error.value}</p>
                 </c:if>
             </c:forEach>

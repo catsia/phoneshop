@@ -1,5 +1,6 @@
 package com.es.phoneshop.web.controller.support;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
@@ -17,15 +18,10 @@ public class BindingResultErrorHandler {
 
     public Map<String, String> getErrorsForCart(BindingResult bindingResult) {
         return bindingResult.getFieldErrors().stream()
-                .filter(fieldError -> fieldError.getField().startsWith("cartItemReduced[") && fieldError.getCode() != null)
+                .filter(fieldError -> fieldError.getCode() != null)
                 .collect(Collectors.toMap(
-                        fieldError -> {
-                            int startIndex = fieldError.getField().indexOf("[") + 1;
-                            int endIndex = fieldError.getField().indexOf("]");
-                            System.out.println(fieldError.getField().substring(startIndex, endIndex));
-                            return fieldError.getField().substring(startIndex, endIndex);
-                        },
-                        FieldError::getCode
+                        DefaultMessageSourceResolvable::getCode,
+                        FieldError::getDefaultMessage
                 ));
     }
 
