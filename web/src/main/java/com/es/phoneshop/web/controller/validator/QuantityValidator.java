@@ -28,6 +28,10 @@ public class QuantityValidator implements Validator {
         }
         currentStock = stockDao.get(cartItemReduced.getId()).get();
 
+        if (cartItemReduced.getQuantity() == null) {
+            errors.rejectValue("quantity", "Quantity is empty");
+            return;
+        }
         if (cartItemReduced.getQuantity() < 0) {
             errors.rejectValue("quantity", "Quantity is negative");
         }
