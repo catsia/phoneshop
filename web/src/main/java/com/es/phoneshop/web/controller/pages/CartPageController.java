@@ -1,8 +1,6 @@
 package com.es.phoneshop.web.controller.pages;
 
-import com.es.core.cart.CartItemConverter;
-import com.es.core.cart.CartItemReducedDto;
-import com.es.core.cart.CartService;
+import com.es.core.cart.*;
 import com.es.phoneshop.web.controller.support.BindingResultErrorHandler;
 import com.es.phoneshop.web.controller.validator.QuantityValidatorForDto;
 import org.springframework.stereotype.Controller;
@@ -38,11 +36,13 @@ public class CartPageController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String getCart(Model model) {
-        Map<String, String> errors = (Map<String, String>) model.asMap().get("errors");
+        Map<Long, String> errors = (Map<Long, String>) model.asMap().get("errors");
+        CartItemReducedDto cartItemReducedDto = (CartItemReducedDto) model.asMap().get("cartItemReducedDtoWithErrors");
         String successes = (String) model.asMap().get("successes");
 
         if (errors != null && !errors.isEmpty()) {
             model.addAttribute("errors", errors);
+            model.addAttribute("cartItemReducedDtoWithErrors", cartItemReducedDto);
         } else if (successes != null && !successes.isEmpty()) {
             model.addAttribute("successes", successes);
         }
@@ -56,6 +56,7 @@ public class CartPageController {
     public String updateCart(@Valid @ModelAttribute("cartItemReducedDto") CartItemReducedDto cartItemReducedDto, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", bindingResultErrorHandler.getErrorsForCart(result));
+            redirectAttributes.addFlashAttribute("cartItemReducedDtoWithErrors", cartItemReducedDto);
         } else {
             redirectAttributes.addFlashAttribute("successes", "Cart successfully updated");
             cartService.update(cartItemConverter.convertToCartItems(cartItemReducedDto.getCartItemReduced()));
