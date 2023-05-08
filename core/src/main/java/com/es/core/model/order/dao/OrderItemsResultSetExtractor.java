@@ -28,16 +28,19 @@ public class OrderItemsResultSetExtractor implements ResultSetExtractor<List<Ord
                 orderItem.setPhone(phone);
                 orderItemMap.put(id, orderItem);
             }
+            else {
+                phone = orderItem.getPhone();
+            }
             Set<Color> colors = phone.getColors();
 
             if (colors == Collections.EMPTY_SET) {
                 colors = new HashSet<>();
+                phone.setColors(colors);
             }
             Color color = new Color();
             color.setId(resultSet.getLong("id"));
             color.setCode(resultSet.getString("code"));
             colors.add(color);
-            orderItemMap.get(id).getPhone().setColors(colors);
         }
         return new ArrayList<>(orderItemMap.values());
 
