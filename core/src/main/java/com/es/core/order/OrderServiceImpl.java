@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +39,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order createOrder(Cart cart) {
         Order order = new Order();
+        order.setSecureId(UUID.randomUUID().toString());
         order.setOrderItems(cart.getCartItems().stream().map(cartItem -> {
             OrderItem orderItem = new OrderItem();
             orderItem.setPhone(cartItem.getPhone());
@@ -72,6 +74,16 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderNotFound("No order with number " + id + " found");
         }
         order.get().setOrderItems(orderItemDao.getOrderItems(id));
+        return order.get();
+    }
+
+    @Override
+    public Order getOrderBySecureId(String id) throws OrderNotFound {
+        Optional<Order> order = orderDao.getBySecureId(id);
+        if (!order.isPresent()) {
+            throw new OrderNotFound("No order found");
+        }
+        order.get().setOrderItems(orderItemDao.getOrderItems(order.get().getId()));
         return order.get();
     }
 }

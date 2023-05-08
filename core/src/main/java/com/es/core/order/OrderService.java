@@ -7,4 +7,6 @@ public interface OrderService {
     Order createOrder(Cart cart);
     long placeOrder(Order order) throws OutOfStockException;
     Order getOrder(Long id) throws OrderNotFound;
+
+    Order getOrderBySecureId(String id) throws OrderNotFound;
 }

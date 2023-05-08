@@ -38,6 +38,7 @@ public class OrderConverter {
             orderItems.add(orderItem);
         }
 
+        order.setSecureId(orderReduced.getSecureId());
         order.setOrderItems(orderItems);
         order.setFirstName(orderReduced.getFirstName());
         order.setLastName(orderReduced.getLastName());

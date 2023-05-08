@@ -58,6 +58,7 @@ create table stocks (
 
 create table orders (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  secureId VARCHAR(100),
   subtotal FLOAT,
   deliveryPrice FLOAT,
   totalPrice FLOAT,

@@ -19,10 +19,10 @@ public class OrderOverviewPageController {
     private OrderService orderService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String showOrderOverview(@PathVariable("id") Long id, Model model) {
+    public String showOrderOverview(@PathVariable("id") String id, Model model) {
         Order order;
         try {
-            order = orderService.getOrder(id);
+            order = orderService.getOrderBySecureId(id);
         } catch (OrderNotFound e) {
             model.addAttribute("error", e.getMessage());
             return "orderNotFound";

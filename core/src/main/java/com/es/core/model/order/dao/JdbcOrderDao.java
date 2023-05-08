@@ -21,11 +21,13 @@ public class JdbcOrderDao implements OrderDao {
     private JdbcTemplate jdbcTemplate;
 
     private final String FIND_ALL_QUERY = "select * from orders";
-    private final String GET_BI_ID_QUERY = "select * from orders where id=?";
+    private final String GET_BY_ID_QUERY = "select * from orders where id=?";
+    private final String GET_BY_SECURE_ID_QUERY = "select * from orders where secureId=?";
 
     @Override
     public long save(Order order) {
         MapSqlParameterSource parameters = new MapSqlParameterSource()
+                .addValue("secureId", order.getSecureId())
                 .addValue("firstName", order.getFirstName())
                 .addValue("lastName", order.getLastName())
                 .addValue("deliveryAddress", order.getDeliveryAddress())
@@ -49,7 +51,13 @@ public class JdbcOrderDao implements OrderDao {
 
     @Override
     public Optional<Order> get(Long key) {
-        List<Order> orders = jdbcTemplate.query(GET_BI_ID_QUERY, new BeanPropertyRowMapper<>(Order.class), key);
+        List<Order> orders = jdbcTemplate.query(GET_BY_ID_QUERY, new BeanPropertyRowMapper<>(Order.class), key);
+        return Optional.ofNullable(!orders.isEmpty() ? orders.get(0) : null);
+    }
+
+    @Override
+    public Optional<Order> getBySecureId(String key) {
+        List<Order> orders = jdbcTemplate.query(GET_BY_SECURE_ID_QUERY, new BeanPropertyRowMapper<>(Order.class), key);
         return Optional.ofNullable(!orders.isEmpty() ? orders.get(0) : null);
     }
 }

@@ -3,6 +3,7 @@ package com.es.core.model.order;
 import java.util.Map;
 
 public class OrderReduced {
+    private String secureId;
 
     private Map<Long, Long> orderItems;
     private String firstName;
@@ -10,6 +11,14 @@ public class OrderReduced {
     private String deliveryAddress;
     private String contactPhoneNo;
     private String additionalInformation;
+
+    public String getSecureId() {
+        return secureId;
+    }
+
+    public void setSecureId(String secureId) {
+        this.secureId = secureId;
+    }
 
     public Map<Long, Long> getOrderItems() {
         return orderItems;

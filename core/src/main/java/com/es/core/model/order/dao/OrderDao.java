@@ -9,4 +9,6 @@ public interface OrderDao {
     long save(Order order);
     List<Order> findAll();
     Optional<Order> get(Long key);
+
+    Optional<Order> getBySecureId(String key);
 }

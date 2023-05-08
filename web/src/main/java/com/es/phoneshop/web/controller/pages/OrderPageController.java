@@ -69,16 +69,15 @@ public class OrderPageController {
             redirectAttributes.addFlashAttribute("order", orderConverter.convert(orderReduced));
             return "order";
         }
-        long id;
         Order order = orderConverter.convert(orderReduced);
         try {
-            id = orderService.placeOrder(order);
+            orderService.placeOrder(order);
         } catch (OutOfStockException e) {
             model.addAttribute("outOfStockError", e.getMessage());
             model.addAttribute("order", order);
             return "order";
         }
         cartService.removeAll();
-        return "redirect:/orderOverview/" + id;
+        return "redirect:/orderOverview/" + order.getSecureId();
     }
 }

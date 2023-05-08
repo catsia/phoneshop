@@ -105,6 +105,7 @@
             <c:forEach var="orderItem" items="${order.orderItems}" varStatus="i">
                 <form:hidden path="orderItems[${orderItem.phone.id}]" value="${orderItem.quantity}" />
             </c:forEach>
+            <form:hidden path="secureId" value="${order.secureId}" />
 
         <tr>
             <td><form:label path="firstName">First name*:</form:label></td>
