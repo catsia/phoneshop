@@ -98,6 +98,7 @@
          </td>
      </tr>
   </table>
+  <p class="error">${orderItemsError}</p></td>
    <form:form method="POST" modelAttribute="orderReduced">
 
     <table>

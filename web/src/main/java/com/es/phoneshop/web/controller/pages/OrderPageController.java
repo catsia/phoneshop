@@ -46,7 +46,15 @@ public class OrderPageController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String getOrder(Model model) throws OutOfStockException {
+        if (cartService.getCart().getCartItems().isEmpty()) {
+            model.addAttribute("error", "Cart is empty");
+            return "orderIsEmpty";
+        }
         Order order = orderService.createOrder(cartService.getCart());
+        if (order.getOrderItems().isEmpty()) {
+            model.addAttribute("error", "Order is empty");
+            return "orderIsEmpty";
+        }
         model.addAttribute("order", order);
         model.addAttribute("orderReduced", new OrderReduced());
         return "order";
@@ -56,9 +64,9 @@ public class OrderPageController {
     public String placeOrder(@Valid @ModelAttribute("orderReduced") OrderReduced orderReduced, BindingResult result, RedirectAttributes redirectAttributes, Model model) throws OutOfStockException {
         if (result.hasErrors()) {
             bindingResultErrorHandler.getErrors(result).entrySet().stream().forEach(stringStringEntry ->
-                    model.addAttribute(stringStringEntry.getKey() + "Error", stringStringEntry.getValue())
+                    redirectAttributes.addFlashAttribute(stringStringEntry.getKey() + "Error", stringStringEntry.getValue())
             );
-            model.addAttribute("order", orderConverter.convert(orderReduced));
+            redirectAttributes.addFlashAttribute("order", orderConverter.convert(orderReduced));
             return "order";
         }
         long id;
