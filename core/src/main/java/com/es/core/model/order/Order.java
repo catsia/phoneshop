@@ -1,6 +1,7 @@
 package com.es.core.model.order;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public class Order {
@@ -23,6 +24,15 @@ public class Order {
     private String contactPhoneNo;
     private OrderStatus status;
     private String additionalInformation;
+    private Date date;
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     public String getAdditionalInformation() {
         return additionalInformation;
