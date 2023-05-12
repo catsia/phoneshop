@@ -24,6 +24,9 @@ public class OrderConverter {
     @Resource
     private PhoneDao phoneDao;
 
+    @Resource
+    private OrderService orderService;
+
     public Order convert(OrderReduced orderReduced) {
         Order order = new Order();
         List<OrderItem> orderItems = new ArrayList<>();
@@ -45,16 +48,10 @@ public class OrderConverter {
         order.setDeliveryAddress(orderReduced.getDeliveryAddress());
         order.setContactPhoneNo(orderReduced.getContactPhoneNo());
         order.setAdditionalInformation(orderReduced.getAdditionalInformation());
-        order.setSubtotal(calculateSubtotal(orderItems));
+        order.setSubtotal(orderService.calculateSubtotal(orderItems));
         order.setDeliveryPrice(deliveryPrice);
         order.setTotalPrice(order.getSubtotal().add(order.getDeliveryPrice()));
         order.setStatus(OrderStatus.NEW);
         return order;
-    }
-
-    private BigDecimal calculateSubtotal(List<OrderItem> orderItems) {
-        return orderItems.stream()
-                .map(orderItem -> orderItem.getPhone().getPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

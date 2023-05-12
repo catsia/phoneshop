@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -85,5 +86,12 @@ public class OrderServiceImpl implements OrderService {
         }
         order.get().setOrderItems(orderItemDao.getOrderItems(order.get().getId()));
         return order.get();
+    }
+
+    @Override
+    public BigDecimal calculateSubtotal(List<OrderItem> orderItems) {
+        return orderItems.stream()
+                .map(orderItem -> orderItem.getPhone().getPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
