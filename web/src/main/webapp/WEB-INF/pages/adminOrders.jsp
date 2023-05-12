@@ -2,12 +2,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <p>
 <tags:master/>
+<c:if test="${empty orders}">
+    <h2>No orders found</h2>
+</c:if>
 
-
+<c:if test="${not empty orders}">
+<h2>Orders found: ${orders.size()}</h2>
   <table border="1px">
     <thead>
       <tr>
@@ -46,8 +49,6 @@
        <tr>
       </tr>
     </c:forEach>
-    </table>
-
-<a href="${pageContext.servletContext.contextPath}/"><button type="button">Back to product list</button></a>
-
+ </table>
+ </c:if>
 </p>
