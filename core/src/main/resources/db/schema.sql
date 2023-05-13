@@ -67,7 +67,7 @@ create table orders (
   deliveryAddress VARCHAR(200),
   additionalInformation VARCHAR(1000),
   contactPhoneNo VARCHAR(15),
-  date DATE,
+  date DATETIME,
   status ENUM ('NEW', 'DELIVERED', 'REJECTED')
 );
 
