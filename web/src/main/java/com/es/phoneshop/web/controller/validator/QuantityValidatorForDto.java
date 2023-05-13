@@ -27,18 +27,22 @@ public class QuantityValidatorForDto implements Validator {
         for(CartItemReduced cartItemReduced: cartItemReducedDto.getCartItemReduced()) {
             Stock currentStock;
             if (!stockDao.get(cartItemReduced.getId()).isPresent()) {
-                errors.rejectValue("cartItemReduced["+index+"]", "Phone has no stock");
+                errors.rejectValue("cartItemReduced["+index+"]", cartItemReduced.getId().toString(), "Phone has no stock");
             }
             currentStock = stockDao.get(cartItemReduced.getId()).get();
 
+            if (cartItemReduced.getQuantity() == null) {
+                errors.rejectValue("cartItemReduced["+index+"]", cartItemReduced.getId().toString(), "Quantity is empty");
+                return;
+            }
             if (cartItemReduced.getQuantity() < 0) {
-                errors.rejectValue("cartItemReduced["+index+"]", "Quantity is negative");
+                errors.rejectValue("cartItemReduced["+index+"]", cartItemReduced.getId().toString(), "Quantity is negative");
             }
             if (cartItemReduced.getQuantity() == 0) {
-                errors.rejectValue("cartItemReduced["+index+"]", "Quantity is zero");
+                errors.rejectValue("cartItemReduced["+index+"]", cartItemReduced.getId().toString(), "Quantity is zero");
             }
             if (currentStock.getStock() - cartItemReduced.getQuantity() < 0) {
-                errors.rejectValue("cartItemReduced["+index+"]", "Quantity is more than in stock");
+                errors.rejectValue("cartItemReduced["+index+"]", cartItemReduced.getId().toString(), "Quantity is more than in stock");
             }
             index++;
         }

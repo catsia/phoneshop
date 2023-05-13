@@ -12,6 +12,7 @@
 
     <bean id="quantityValidator" class="com.es.phoneshop.web.controller.validator.QuantityValidator"/>
     <bean id="validatorForDto" class="com.es.phoneshop.web.controller.validator.QuantityValidatorForDto"/>
+    <bean id="orderValidator" class="com.es.phoneshop.web.controller.validator.OrderValidator"/>
     <bean id="getError" class="com.es.phoneshop.web.controller.support.BindingResultErrorHandler"/>
 
 </beans>
