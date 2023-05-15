@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -93,6 +94,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+
     public List<Order> getOrders() {
         return orderDao.findAll();
     }
@@ -100,5 +102,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateStatus(Long id, OrderStatus orderStatus) {
         orderDao.updateStatus(id, orderStatus);
+      
+    public BigDecimal calculateSubtotal(List<OrderItem> orderItems) {
+        return orderItems.stream()
+                .map(orderItem -> orderItem.getPhone().getPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

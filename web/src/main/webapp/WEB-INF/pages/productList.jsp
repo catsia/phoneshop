@@ -74,8 +74,13 @@
             <c:if test="${currentPage ne '1'}">
                    <a href="${pageContext.servletContext.contextPath}/productList?page=${previousPage}&sort=${sort}&order=${order}&query=${param.query}" class="pagination">Previous</a>
             </c:if>
-            <c:if test="${maxPage-currentPage <= 10}">
-                <c:forEach begin="${currentPage - (10-(maxPage-currentPage))}" end="${maxPage}" varStatus="loop">
+            <c:if test="${maxPage-currentPage <= 10 && maxPage-currentPage>5}">
+                <c:forEach begin="${currentPage-(10-(maxPage-currentPage))}" end="${maxPage}" varStatus="loop">
+                    <tags:pagination pageNumber="${loop.index}" currentPage="${currentPage}"/>
+                </c:forEach>
+            </c:if>
+            <c:if test="${maxPage-currentPage <= 5}">
+                <c:forEach begin="${currentPage}" end="${maxPage}" varStatus="loop">
                     <tags:pagination pageNumber="${loop.index}" currentPage="${currentPage}"/>
                 </c:forEach>
             </c:if>
