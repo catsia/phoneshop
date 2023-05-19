@@ -46,6 +46,20 @@ public class HttpSessionCartService implements CartService {
     }
 
     @Override
+    public void addPhone(Phone phone, Long quantity) {
+        CartItem cartItem = new CartItem(phone, quantity);
+        if (cart.getCartItems().contains(cartItem)) {
+            int index = cart.getCartItems().indexOf(cartItem);
+            Long currentQuantity = cart.getCartItems().get(index).getQuantity();
+            cart.getCartItems().get(index).setQuantity(currentQuantity + cartItem.getQuantity());
+        } else {
+            cart.getCartItems().add(cartItem);
+        }
+        calculateTotalCost();
+        calculateTotalQuantity();
+    }
+
+    @Override
     public void update(List<CartItem> cartItems) {
         cartItems.forEach(cartItem -> {
             int index = cart.getCartItems().indexOf(cartItem);
@@ -68,6 +82,14 @@ public class HttpSessionCartService implements CartService {
         cart.setCartItems(new ArrayList<>());
         calculateTotalCost();
         calculateTotalQuantity();
+    }
+
+    @Override
+    public void addQuickCart(QuickCart quickCart) {
+        if (quickCart.getValidatedCartItems() != null) {
+            quickCart.getValidatedCartItems().forEach((phone, quantity) -> addPhone(phone, quantity));
+        }
+        quickCart.setValidatedCartItems(null);
     }
 
     public void calculateTotalCost() {

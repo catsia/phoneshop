@@ -10,4 +10,5 @@ public interface PhoneDao {
     void save(Phone phone);
     List<Phone> findAll(int offset, int limit, SortField sortField, SortOrder sortOrder, String query);
     int count(String query);
+    Optional<Phone> get(String model);
 }
