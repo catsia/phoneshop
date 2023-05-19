@@ -94,3 +94,8 @@ button {
   margin-left: 20px;
   margin-bottom: 20px;
 }
+.authentication {
+  position: absolute;
+  top: 5;
+  right: 10;
+}

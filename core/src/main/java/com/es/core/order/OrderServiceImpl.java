@@ -3,6 +3,7 @@ package com.es.core.order;
 import com.es.core.cart.Cart;
 import com.es.core.model.order.Order;
 import com.es.core.model.order.OrderItem;
+import com.es.core.model.order.OrderStatus;
 import com.es.core.model.order.dao.OrderDao;
 import com.es.core.model.order.dao.OrderItemDao;
 import com.es.core.model.phone.Stock;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -55,8 +58,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public long placeOrder(Order order) throws OutOfStockException {
-        long id = orderDao.save(order);
-        order.setId(id);
+        long currentTimeInMillis = System.currentTimeMillis();
+        order.setDate(new Date(currentTimeInMillis));
         for (OrderItem orderItem : order.getOrderItems()) {
             Stock stock = stockDao.get(orderItem.getPhone().getId()).get();
             if (stock.getStock() < orderItem.getQuantity()) {
@@ -64,6 +67,8 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         order.getOrderItems().removeIf(orderItem -> stockDao.get(orderItem.getPhone().getId()).get().getStock() < orderItem.getQuantity());
+        long id = orderDao.save(order);
+        order.setId(id);
         orderItemDao.save(order);
         return id;
     }
@@ -89,6 +94,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+
+    public List<Order> getOrders() {
+        return orderDao.findAll();
+    }
+
+    @Override
+    public void updateStatus(Long id, OrderStatus orderStatus) {
+        orderDao.updateStatus(id, orderStatus);
+      
     public BigDecimal calculateSubtotal(List<OrderItem> orderItems) {
         return orderItems.stream()
                 .map(orderItem -> orderItem.getPhone().getPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity())))

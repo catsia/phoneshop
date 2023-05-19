@@ -64,9 +64,9 @@ public class OrderPageController {
     public String placeOrder(@Valid @ModelAttribute("orderReduced") OrderReduced orderReduced, BindingResult result, RedirectAttributes redirectAttributes, Model model) throws OutOfStockException {
         if (result.hasErrors()) {
             bindingResultErrorHandler.getErrors(result).entrySet().stream().forEach(stringStringEntry ->
-                    redirectAttributes.addFlashAttribute(stringStringEntry.getKey() + "Error", stringStringEntry.getValue())
+                    model.addAttribute(stringStringEntry.getKey() + "Error", stringStringEntry.getValue())
             );
-            redirectAttributes.addFlashAttribute("order", orderConverter.convert(orderReduced));
+            model.addAttribute("order", orderConverter.convert(orderReduced));
             return "order";
         }
         Order order = orderConverter.convert(orderReduced);
